@@ -1,0 +1,18 @@
+---
+  - hosts: odoo
+    become: yes
+    tasks:
+      - name: Executar o container postgresql
+        docker_container:
+          name: db
+          image: postgres:9.4
+          env:
+            POSTGRES_PASSWORD: odoo
+      - name: Executar o container odoo
+        docker_container:
+          name: odoo
+          image: odoo
+          links:
+            - "db:db"
+          ports:
+            - "8069:8069"
